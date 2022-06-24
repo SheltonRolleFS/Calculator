@@ -76,7 +76,7 @@ Besides figuring out how to calculate everything, this second problem I ran into
 
 The reason this was a problem was because I use a value state to display numbers to the user and whenever my entry state changes, I updated the value state to be equal to the entry. I do this so as the user enters numbers the display automatically shows what they are entering. However, if I tried clearing the entry state to prepare for a new entry, it would clear the value state and no longer show the user their result. We obviously don't want that so I got to thinking and heres what I came up with.
 
-_**Solution**_
+_**Solution?**_
 I have a concatEntries function that basically makes the numbers the user enters. Since the user would have to enter a number to start a new set of calculations, what I did was make a completed state with a boolean value. When the user clicks the = button, completed gets set to true, and in the concatEntries function, if completed is true it clears everything but, immediatly sets entry equal to what the user is now entering.
 
 So for a little more detail, when the user clicks equal, the value being shown to them is their results, and the entry state is still equal to whatever they entered last, but, as soon as they start entering new numbers, everything resets right before and the whole process starts fresh. This way I could keep my simple way of updating value based on result without having to hack my way to keeping the final value while resetting entry.
