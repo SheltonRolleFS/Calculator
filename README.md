@@ -1,70 +1,38 @@
-# Getting Started with Create React App
+# Basic Calculator
+This project is a basic calculator I made from scratch. I had followed tutorials like this when I first started learning how to code so I decided to challenge myself to make one on my own.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## My Thought Process
+#### Displaying the users entries
+When using a calculator, it would obviously be nice to see the numbers you're entering. So, to display the users entry I decided to use an input element. Now realistically I could have used a normal div or paragraph element for this but the input tag was just my initial choice. Also if I wanted, with an input I could allow the user to type their number in so boom, planning ahead.
 
-## Available Scripts
+Getting back to displaying what the user enters, since I'm using react, I created a state variable using the useState hook called value and one called entry. Value will hold whatever needs to be displayed to the user and entry is used to keep track of the number the user is entering. So as the user enters numbers and operations, we keep update their entry and whenever the entry state is updated the value state is updated to match it. 
 
-In the project directory, you can run:
+**Problem #1**
+Now while I define this as a problem, it was really just something I wanted to point out. Since we're using a calculator the initial thought would be that we would be using numbers for all these entries, but, if you try to add one number to the end of another, in code, javascript would take that as u wanting to add the numbers together and thats not what we want.
 
-### `npm start`
+_**Solution?**_
+Use a string instead of a number. We basically just have an empty string to start, and every number the user enters we just concat to the end of that string. Then when we want to make the calculation, we convert that string to a int or float and continue as normal.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**Code Example**
+```javascript
+	const [value, setValue] = useState("");
+	const [entry, setEntry] = useState("");
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+	const concatEntries = (singleEntry) => {
+		let newNumber = entry.concat(singleEntry);
+		setEntry(newNumber);
+	};
 
-### `npm test`
+	useEffect(() => {
+		setValue(entry);
+	}, [entry])
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+	return (
+		<input id="result" type="text" value={value} disabled />
+	)
+```
 
-### `npm run build`
+### Calculating the users results
+When I first tackled this portion of the calculator, my initial plan was to save all the entries and operations the user entered then somehow do each one in order. It took me about 5 minutes to realize how much extra work that is. So I said screw that and decided to just calculate everything as it goes.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# [Update with the solution to calculating the users results]
