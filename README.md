@@ -35,4 +35,54 @@ Use a string instead of a number. We basically just have an empty string to star
 ### Calculating the users results
 When I first tackled this portion of the calculator, my initial plan was to save all the entries and operations the user entered then somehow do each one in order. It took me about 5 minutes to realize how much extra work that is. So I said screw that and decided to just calculate everything as it goes.
 
-# [Update with the solution to calculating the users results]
+To do this, I updated my updateOperation function so that as more operations are entered calculations are made, saved and then everything is updated. I use a variable called waitingNumber to represent the previous number the user entered or the result of the previous calculation the user did in their current line of calculations, since calculators should allow for us to make more than one calculation at once.
+
+By default this waitingNumber variable is null, so if an operation is updated and waitingNumber is null, it simply sets waitingNumber equal to the current entry, sets the operation to whatever the user clicked and clears entry.
+
+If there is a waiting number, the updateOperation runs the calculate function to get the current result of what the user has entered so far and sets the waiting number equal to that result. This is so when the user enters another operation and entry, we still have the previous result that they want to use.
+
+**My updateOperation Function**
+```javascript
+const updateOperation = (newOperation) => {
+	if (waitingNumber === null){
+		setWaitingNumber(entry);
+		setOperation(newOperation);
+		setEntry("");
+		return
+	}
+
+	const result = calculate(
+		parseFloat(waitingNumber),
+		parseFloat(entry),
+		operation
+	)
+	
+	setWaitingNumber(result);
+	setOperation(newOperation);
+	setEntry("");
+}
+```
+
+**Problem #2**
+Besides figuring out how to calculate everything, this second problem I ran into was the first time I really had to sit back and think about how I would solve it. This problem was figuring out how to display the users results while also preparing the calculator to accept a whole new set of calculations.
+
+The reason this was a problem was because I use a value state to display numbers to the user and whenever my entry state changes, I updated the value state to be equal to the entry. I do this so as the user enters numbers the display automatically shows what they are entering. However, if I tried clearing the entry state to prepare for a new entry, it would clear the value state and no longer show the user their result. We obviously don't want that so I got to thinking and heres what I came up with.
+
+_**Solution**_
+I have a concatEntries function that basically makes the numbers the user enters. Since the user would have to enter a number to start a new set of calculations, what I did was make a completed state with a boolean value. When the user clicks the = button, completed gets set to true, and in the concatEntries function, if completed is true it clears everything but, immediatly sets entry equal to what the user is now entering.
+
+So for a little more detail, when the user clicks equal, the value being shown to them is their results, and the entry state is still equal to whatever they entered last, but, as soon as they start entering new numbers, everything resets right before and the whole process starts fresh. This way I could keep my simple way of updating value based on result without having to hack my way to keeping the final value while resetting entry.
+
+**Here is my concatEntries function**
+```javascript
+const concatEntries = (singleEntry) => {
+	if (completed){
+		clear();
+		setEntry(singleEntry);
+		setCompleted(false);
+		return;
+	}
+	let newNumber = entry.concat(singleEntry);
+	setEntry(newNumber);
+}
+```

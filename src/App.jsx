@@ -1,24 +1,28 @@
+import { getValue } from "@testing-library/user-event/dist/utils";
 import { useEffect, useState } from "react";
 
 // Component Imports
 import { Button } from "./components/Button";
 
 function App() {
-    const [result, setResult] = useState("0");
+    const [completed, setCompleted] = useState(false);
     const [value, setValue] = useState("");
     const [entry, setEntry] = useState("");
     const [operation, setOperation] = useState("");
     const [waitingNumber, setWaitingNumber] = useState(null);
 
     const concatEntries = (singleEntry) => {
+        if (completed) {
+            clear();
+            setEntry(singleEntry);
+            setCompleted(false);
+            return;
+        }
         let newNumber = entry.concat(singleEntry);
         setEntry(newNumber);
     };
 
     const calculate = (intA, intB, operation) => {
-        console.log("A: ", intA);
-        console.log("B: ", intB);
-        console.log("Operation: ", operation);
         let result;
         switch (operation) {
             case "add":
@@ -47,51 +51,33 @@ function App() {
             setEntry("");
             return;
         }
-        if (operation === "") {
-            setOperation(newOperation);
-        } else if (operation !== "") {
-            const result = calculate(
-                parseFloat(waitingNumber),
-                parseFloat(entry),
-                operation
-            );
-            setResult(result);
-            setWaitingNumber(result);
-            setOperation(newOperation);
-        }
+        const result = calculate(
+            parseFloat(waitingNumber),
+            parseFloat(entry),
+            operation
+        );
+        setWaitingNumber(result);
+        setOperation(newOperation);
         setEntry("");
     };
 
     useEffect(() => {
+        console.log(entry);
         setValue(entry);
     }, [entry]);
 
-    useEffect(() => {
-        console.log(result);
-    }, [result]);
+    const submit = () => {
+        setValue(
+            calculate(parseFloat(waitingNumber), parseFloat(entry), operation)
+        );
+        setCompleted(true);
+    };
 
     const clear = () => {
         setEntry("");
         setOperation("");
         setWaitingNumber(null);
-        setResult("0");
     };
-
-    // useEffect(() => {
-    //     if (entry !== "") {
-    //         if (waitingNumber === null) {
-    //             setWaitingNumber(entry);
-    //         } else {
-    //             const result = calculate(
-    //                 parseFloat(waitingNumber),
-    //                 parseFloat(entry),
-    //                 prevOperation !== "" ? prevOperation : operation
-    //             );
-    //             setWaitingNumber(result);
-    //         }
-    //         setEntry("");
-    //     }
-    // }, [operation]);
 
     return (
         <section id="calculator">
@@ -177,15 +163,7 @@ function App() {
                 <Button
                     label="="
                     className="calculate"
-                    onClick={() =>
-                        setValue(
-                            calculate(
-                                parseFloat(waitingNumber),
-                                parseFloat(entry),
-                                operation
-                            )
-                        )
-                    }
+                    onClick={() => submit()}
                 />
                 <Button label="clear" onClick={() => clear()} />
             </div>
