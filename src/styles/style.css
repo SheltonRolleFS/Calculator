@@ -20,7 +20,11 @@ button {
 	padding: 20px 10px;
 }
 
-#calculate{
+#actions{
+	display: flex;
+}
+
+.calculate{
 	width: 100%;
 }
 

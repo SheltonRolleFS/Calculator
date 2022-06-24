@@ -1,37 +1,65 @@
 import { useEffect, useState } from "react";
 
+// Component Imports
+import { Button } from "./components/Button";
+
 function App() {
+    const [result, setResult] = useState("0");
     const [value, setValue] = useState("");
     const [entry, setEntry] = useState("");
-    const [entries, setEntries] = useState([]);
-    const [enteredOperations, setEnteredOperations] = useState([]);
     const [operation, setOperation] = useState("");
+    const [waitingNumber, setWaitingNumber] = useState(null);
 
     const concatEntries = (singleEntry) => {
         let newNumber = entry.concat(singleEntry);
         setEntry(newNumber);
     };
 
-    const calculate = () => {
-        const allEntries = [...entries, entry];
-        let tempValue = 0;
-        console.log("Entries: ", allEntries);
-        console.log("Operations: ", enteredOperations);
-
-        for (let i = 0; i < enteredOperations.length; i++) {
-            switch (enteredOperations[i]) {
-                case "add":
-                    break;
-                case "subtract":
-                    break;
-                case "multiply":
-                    break;
-                case "divide":
-                    break;
-                default:
-                    return;
-            }
+    const calculate = (intA, intB, operation) => {
+        console.log("A: ", intA);
+        console.log("B: ", intB);
+        console.log("Operation: ", operation);
+        let result;
+        switch (operation) {
+            case "add":
+                result = intA + intB;
+                break;
+            case "subtract":
+                result = intA - intB;
+                break;
+            case "multiply":
+                result = intA * intB;
+                break;
+            case "divide":
+                result = intA / intB;
+                break;
+            default:
+                break;
         }
+        setOperation("");
+        return result;
+    };
+
+    const updateOperation = (newOperation) => {
+        if (waitingNumber === null) {
+            setWaitingNumber(entry);
+            setOperation(newOperation);
+            setEntry("");
+            return;
+        }
+        if (operation === "") {
+            setOperation(newOperation);
+        } else if (operation !== "") {
+            const result = calculate(
+                parseFloat(waitingNumber),
+                parseFloat(entry),
+                operation
+            );
+            setResult(result);
+            setWaitingNumber(result);
+            setOperation(newOperation);
+        }
+        setEntry("");
     };
 
     useEffect(() => {
@@ -39,16 +67,31 @@ function App() {
     }, [entry]);
 
     useEffect(() => {
-        if (entry === "") return;
-        const allEntries = entries;
-        allEntries.push(entry);
-        setEntries(allEntries);
-        setEntry("");
+        console.log(result);
+    }, [result]);
 
-        const allOperations = enteredOperations;
-        allOperations.push(operation);
-        setEnteredOperations(allOperations);
-    }, [operation]);
+    const clear = () => {
+        setEntry("");
+        setOperation("");
+        setWaitingNumber(null);
+        setResult("0");
+    };
+
+    // useEffect(() => {
+    //     if (entry !== "") {
+    //         if (waitingNumber === null) {
+    //             setWaitingNumber(entry);
+    //         } else {
+    //             const result = calculate(
+    //                 parseFloat(waitingNumber),
+    //                 parseFloat(entry),
+    //                 prevOperation !== "" ? prevOperation : operation
+    //             );
+    //             setWaitingNumber(result);
+    //         }
+    //         setEntry("");
+    //     }
+    // }, [operation]);
 
     return (
         <section id="calculator">
@@ -56,84 +99,96 @@ function App() {
             <div id="controls">
                 <div className="number-grid">
                     <div className="number-row">
-                        <button
+                        <Button
+                            label="7"
+                            className="cell-span-1"
                             onClick={() => concatEntries("7")}
+                        />
+                        <Button
+                            label="8"
                             className="cell-span-1"
-                        >
-                            7
-                        </button>
-                        <button
                             onClick={() => concatEntries("8")}
+                        />
+                        <Button
+                            label="9"
                             className="cell-span-1"
-                        >
-                            8
-                        </button>
-                        <button
                             onClick={() => concatEntries("9")}
-                            className="cell-span-1"
-                        >
-                            9
-                        </button>
+                        />
                     </div>
                     <div className="number-row">
-                        <button
+                        <Button
+                            label="4"
+                            className="cell-span-1"
                             onClick={() => concatEntries("4")}
+                        />
+                        <Button
+                            label="5"
                             className="cell-span-1"
-                        >
-                            4
-                        </button>
-                        <button
                             onClick={() => concatEntries("5")}
+                        />
+                        <Button
+                            label="6"
                             className="cell-span-1"
-                        >
-                            5
-                        </button>
-                        <button
                             onClick={() => concatEntries("6")}
-                            className="cell-span-1"
-                        >
-                            6
-                        </button>
+                        />
                     </div>
                     <div className="number-row">
-                        <button
+                        <Button
+                            label="1"
+                            className="cell-span-1"
                             onClick={() => concatEntries("1")}
+                        />
+                        <Button
+                            label="2"
                             className="cell-span-1"
-                        >
-                            1
-                        </button>
-                        <button
                             onClick={() => concatEntries("2")}
+                        />
+                        <Button
+                            label="3"
                             className="cell-span-1"
-                        >
-                            2
-                        </button>
-                        <button
                             onClick={() => concatEntries("3")}
-                            className="cell-span-1"
-                        >
-                            3
-                        </button>
+                        />
                     </div>
                     <div className="number-row">
-                        <button
-                            onClick={() => concatEntries("0")}
+                        <Button
+                            label="0"
                             className="cell-span-3"
-                        >
-                            0
-                        </button>
+                            onClick={() => concatEntries("0")}
+                        />
                     </div>
                 </div>
                 <div id="operations">
-                    <button onClick={() => setOperation("add")}>+</button>
-                    <button onClick={() => setOperation("subtract")}>-</button>
-                    <button onClick={() => setOperation("divide")}>/</button>
-                    <button onClick={() => setOperation("multiply")}>*</button>
+                    <Button label="+" onClick={() => updateOperation("add")} />
+                    <Button
+                        label="-"
+                        onClick={() => updateOperation("subtract")}
+                    />
+                    <Button
+                        label="*"
+                        onClick={() => updateOperation("multiply")}
+                    />
+                    <Button
+                        label="/"
+                        onClick={() => updateOperation("divide")}
+                    />
                 </div>
             </div>
-            <button id="calculate" onClick={calculate}>
-                =
-            </button>
+            <div id="actions">
+                <Button
+                    label="="
+                    className="calculate"
+                    onClick={() =>
+                        setValue(
+                            calculate(
+                                parseFloat(waitingNumber),
+                                parseFloat(entry),
+                                operation
+                            )
+                        )
+                    }
+                />
+                <Button label="clear" onClick={() => clear()} />
+            </div>
         </section>
     );
 }
