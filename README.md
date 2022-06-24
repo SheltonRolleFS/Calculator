@@ -1,6 +1,13 @@
 # Basic Calculator
 This project is a basic calculator I made from scratch. I had followed tutorials like this when I first started learning how to code so I decided to challenge myself to make one on my own.
 
+#### Instillation Instructions
+After cloning the repository run either of the following commands:
+```npm install```
+
+or
+
+```yarn install```
 ## My Thought Process
 #### Displaying the users entries
 When using a calculator, it would obviously be nice to see the numbers you're entering. So, to display the users entry I decided to use an input element. Now realistically I could have used a normal div or paragraph element for this but the input tag was just my initial choice. Also if I wanted, with an input I could allow the user to type their number in so boom, planning ahead.
@@ -56,7 +63,7 @@ const updateOperation = (newOperation) => {
 		parseFloat(entry),
 		operation
 	)
-	
+
 	setWaitingNumber(result);
 	setOperation(newOperation);
 	setEntry("");
