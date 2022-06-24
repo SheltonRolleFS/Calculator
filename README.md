@@ -3,6 +3,7 @@ This project is a basic calculator I made from scratch. I had followed tutorials
 
 #### Instillation Instructions
 After cloning the repository run either of the following commands:
+
 ```npm install```
 
 or
